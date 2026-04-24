@@ -1,0 +1,44 @@
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    address TEXT,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE categories (
+	category_id int AUTO_INCREMENT PRIMARY KEY,
+    category_name varchar(100) NOT NULL UNIQUE,
+    category_status ENUM('active','inactive'),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE brands (
+	brand_id int AUTO_INCREMENT PRIMARY KEY,
+    brand_name varchar(100) NOT NULL UNIQUE,
+    brand_status ENUM('active','inactive'),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+    product_id int AUTO_INCREMENT PRIMARY KEY,
+    product_name varchar(100) NOT NULL,
+    description text,
+    price decimal,
+    product_image varchar(255),
+    category_id int,
+    brand_id int,
+    user_id int,
+    product_status ENUM('active','inactive'),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE,
+    FOREIGN KEY (brand_id) REFERENCES brands(brand_id) ON DELETE CASCADE
+);
+
+
