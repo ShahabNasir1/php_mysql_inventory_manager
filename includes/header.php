@@ -10,7 +10,7 @@
 
     <base href="<?php echo htmlspecialchars($baseHref ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
-    <title>INSPINIA | Basic Form Copy</title>
+    <title>Ecommerce</title>
   
     <link href="assets/css/mainCSS/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/mainCSS/font-awesome.css" rel="stylesheet">
