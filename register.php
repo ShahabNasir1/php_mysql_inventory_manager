@@ -1,28 +1,29 @@
-<?php 
-include "config.php"; // Database connection file include karein
+<?php
+include "config.php"; 
 
-$message = ""; // Error ya success message dikhane ke liye
+$message = ""; 
 
 if (isset($_POST['register'])) {
-    // Data ko clean karna taake security bani rahe
     $name     = mysqli_real_escape_string($conn, $_POST['uName']);
     $email    = mysqli_real_escape_string($conn, $_POST['uEmail']);
-    $password = $_POST['uPassword']; // Password hash karne ke liye real_escape zaroori nahi
+    $password = $_POST['uPassword'];
+    
+    // NEW: Get the userType from the dropdown
+    $userType = mysqli_real_escape_string($conn, $_POST['userType']);
 
-    // 1. Password hashing (Security ke liye)
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-    // 2. Check karna ke email pehle se to maujood nahi
     $checkEmail = $conn->query("SELECT email FROM users WHERE email = '$email'");
-    
+
     if ($checkEmail->num_rows > 0) {
         $message = "<div class='alert alert-danger'>Email already exists!</div>";
     } else {
-        // 3. Database mein insert karna
-        $sql = "INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$hashed_password')";
-        
+        // UPDATED: Added user_type to the column list and values
+        $sql = "INSERT INTO users (name, email, password, user_type) 
+                VALUES ('$name', '$email', '$hashed_password', '$userType')";
+
         if ($conn->query($sql)) {
-            $message = "<div class='alert alert-success'>Registration Successful! <a href='login.php'>Login here</a></div>";
+            $message = "<div class='alert alert-success'>Registration Successful as ".ucfirst($userType)."! <a href='login.php'>Login here</a></div>";
         } else {
             $message = "<div class='alert alert-danger'>Error: " . $conn->error . "</div>";
         }
@@ -32,6 +33,7 @@ if (isset($_POST['register'])) {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,10 +50,10 @@ if (isset($_POST['register'])) {
             <h1 class="logo-name">EC+</h1>
             <h3>Register to Ecommerce</h3>
             <p>Create account to see it in action.</p>
-            
+
             <?php echo $message; ?>
 
-            <form class="m-t" role="form" method="POST" action="register.php">
+            <form class="m-t mb-2" role="form" method="POST" action="register.php">
                 <div class="form-group">
                     <input type="text" name="uName" class="form-control" placeholder="Name" required>
                 </div>
@@ -60,6 +62,14 @@ if (isset($_POST['register'])) {
                 </div>
                 <div class="form-group">
                     <input type="password" name="uPassword" class="form-control" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <select name="userType" class="form-control" required>
+                        <option value="" disabled selected>Select User Type</option>
+                        <option value="admin">Admin</option>
+
+                        <option value="customer">Customer</option>
+                    </select>
                 </div>
                 <div class="form-group text-left">
                     <div class="checkbox i-checks">
@@ -77,4 +87,5 @@ if (isset($_POST['register'])) {
     <script src="assets/js/mainScript/jquery-3.1.1.min.js"></script>
     <script src="assets/js/mainScript/bootstrap.js"></script>
 </body>
+
 </html>

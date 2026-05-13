@@ -1,15 +1,10 @@
 <?php 
 
 include __DIR__ . "/../sessionFile.php";
-
+include __DIR__ . "/../config.php"; 
 $pageName = "deleteBrand";
 $deleteBrand = true;
 $baseHref = "../";
-
-include __DIR__ . "/../config.php";
-include __DIR__ . "/../includes/header.php";
-include __DIR__ . "/../includes/slider.php";
-include __DIR__ . "/../includes/topbar.php";
 ?>
 
 <?php 

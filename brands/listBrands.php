@@ -11,6 +11,7 @@ include __DIR__ . "/../config.php";
 include __DIR__ . "/../includes/header.php"; 
 include __DIR__ . "/../includes/slider.php"; 
 include __DIR__ . "/../includes/topbar.php"; 
+include __DIR__ . "/../includes/adminAccess.php";
 ?>
 
 <div class="col-lg-12">

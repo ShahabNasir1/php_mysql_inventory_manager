@@ -9,7 +9,7 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     // 1. Database se user ko email ke zariye dhoondna
-    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $sql = "SELECT user_id, name, email, password, user_type FROM users WHERE email = '$email'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -22,16 +22,17 @@ if (isset($_POST['login'])) {
             $_SESSION['user_id']   = $user['user_id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_type'] = $user['user_type'];
 
             // Dashboard par bhej dein
             header("Location: index.php");
             exit();
 
         } else {
-            $message = "<div class='alert alert-danger'>Invalid password!</div>";
+            $message = "<div class='alert alert-danger'>Invalid email or password!</div>";
         }
     } else {
-        $message = "<div class='alert alert-danger'>Email not found!</div>";
+        $message = "<div class='alert alert-danger'>Invalid email or password!</div>";
     }
 }
 ?>

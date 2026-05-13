@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include __DIR__ . "/../sessionFile.php";
 
@@ -10,6 +10,46 @@ include __DIR__ . "/../config.php";
 include __DIR__ . "/../includes/header.php";
 include __DIR__ . "/../includes/slider.php";
 include __DIR__ . "/../includes/topbar.php";
+include __DIR__ . "/../includes/adminAccess.php";
+include __DIR__ . "/../serverValidation.php";
+
+
+if (isset($_POST['submit'])) {
+    $errors = [];
+
+    // Taking the data
+    $categoryName = $_POST['categoryName'];
+    $categoryStatus = $_POST['categoryStatus'];
+
+    // Name Validation - empty check and length check parameters are category name aur minimum length 3 characters
+    $nameCheck = validateText($categoryName, 3);
+    if ($nameCheck !== true) {
+        $errors[] = "Category Name: " . $nameCheck;
+    }
+    // Duplicate check karein
+    elseif (isDuplicate($conn, 'categories', 'category_name', $categoryName)) {
+        $errors[] = "This category already exists.";
+    }
+
+    // Status Check
+    if (empty($categoryStatus)) {
+        $errors[] = "Please select a category status.";
+    }
+
+    // If no errors then insert the records
+    if (empty($errors)) {
+        $data = [
+            "category_name" => $categoryName,
+            "category_status" => $categoryStatus
+        ];
+        
+        insertRecord($conn, 'categories', $data);
+    }
+    else {
+        // Display all errors at once
+        displayAlert($errors, "warning");
+    }
+}
 ?>
 
 <div class="col-lg-12">
@@ -18,22 +58,7 @@ include __DIR__ . "/../includes/topbar.php";
             <h5>Add New category</h5>
         </div>
         <div class="ibox-content">
-            <?php
-            // BRAND INSERT LOGI
-            if (isset($_POST['submit'])) {
-                $categoryName = mysqli_real_escape_string($conn, $_POST['categoryName']);
-                $categoryStatus = mysqli_real_escape_string($conn, $_POST['categoryStatus']);
-                
-                $sql = "INSERT INTO categories (category_name, category_status) VALUES ('$categoryName', '$categoryStatus')";
-            
-                if ($conn->query($sql)) {
-                    echo "<div class='alert alert-success'>Category Added Successfully!</div>";
-                } else {
 
-                    echo "<div class='alert alert-danger'>Error: " . $conn->error . "</div>";
-                }
-            }
-            ?>
             <form id="categoryForm" method="POST">
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Category Name</label>

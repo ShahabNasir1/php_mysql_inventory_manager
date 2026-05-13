@@ -41,4 +41,38 @@ CREATE TABLE products (
     FOREIGN KEY (brand_id) REFERENCES brands(brand_id) ON DELETE CASCADE
 );
 
+CREATE TABLE colors (
+    color_id INT AUTO_INCREMENT PRIMARY KEY,
+    color_name VARCHAR(50) NOT NULL UNIQUE
+);
 
+CREATE TABLE product_colors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT,
+    color_id INT,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    FOREIGN KEY (color_id) REFERENCES colors(color_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE sizes (
+    size_id INT AUTO_INCREMENT PRIMARY KEY,
+    size_name VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE product_sizes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT,
+    size_id INT,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    FOREIGN KEY (size_id) REFERENCES sizes(size_id) ON DELETE CASCADE
+);
+
+CREATE TABLE product_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    image_url VARCHAR(512) NOT NULL,
+    sort_order INT DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+);
